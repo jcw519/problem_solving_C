@@ -8,7 +8,7 @@
 int main(){
 	int mat[MAX][MAX];
 	int m, n;
-	FILE *fp = fopen("/workspace/sp_1/study/input.txt", "r");
+	FILE *fp = fopen("/workspace/problem_solving_C/study/input.txt", "r");
 	
 	fscanf(fp, "%d", &m);
 	fscanf(fp, "%d", &n);
@@ -42,7 +42,7 @@ int main(){
 int main(){
 	int A[MAX][MAX], B[MAX][MAX], C[MAX][MAX];
 	int p, q, r;
-	FILE *fp = fopen("/workspace/sp_1/study/input.txt", "r");
+	FILE *fp = fopen("/workspace/problem_solving_C/study/input.txt", "r");
 	
 	fscanf(fp, "%d", &p);
 	fscanf(fp, "%d", &q);
@@ -97,7 +97,7 @@ int main(){
 	int n;
 	char grid[MAX][MAX];
 	
-	FILE *fp = fopen("/workspace/sp_1/study/input.txt","r");
+	FILE *fp = fopen("/workspace/problem_solving_C/study/input.txt","r");
 	fscanf(fp, "%d ", &n);
 	for(int i = 0; i < n; i++){
 		for(int j = 0; j < n; j++){

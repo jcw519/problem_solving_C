@@ -11,7 +11,7 @@ int main(){
 	int n = 0;
 	int data[MAX];
 	
-	FILE *fp = fopen("/workspace/sp_1/study/input.txt", "r");
+	FILE *fp = fopen("/workspace/problem_solving_C/study/input.txt", "r");
 	
 	while(fscanf(fp, "%d", &data[n]) != EOF) n++;
 	fclose(fp);
@@ -64,7 +64,7 @@ int main(){
 	int n = 0;
 	int data[MAX];
 	
-	FILE *fp = fopen("/workspace/sp_1/study/input.txt", "r");
+	FILE *fp = fopen("/workspace/problem_solving_C/study/input.txt", "r");
 	
 	while(fscanf(fp, "%d", &data[n]) != EOF) n++;
 	fclose(fp);

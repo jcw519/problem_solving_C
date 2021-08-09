@@ -41,7 +41,7 @@ int main(){
 //input.txt파일에서 정수들을 입력받아 순서대로 배열에 저장한다. 그런 다음 오름차순으로 정렬하여 출력하라.
 
 int main(){
-	FILE *fp = fopen("/workspace/sp_1/study/input.txt", "r");
+	FILE *fp = fopen("/workspace/problem_solving_C/study/input.txt", "r");
 	int data[MAX];
 	
 	int n = 0;

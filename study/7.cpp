@@ -9,7 +9,7 @@ int main(){
 	int data[MAX];
 	int n = 0, count = 0, K;
 	
-	FILE *fp = fopen("/workspace/sp_1/study/input.txt", "r");
+	FILE *fp = fopen("/workspace/problem_solving_C/study/input.txt", "r");
 	while(fscanf(fp,"%d", &data[n]) != EOF){
 		n++;
 	}
@@ -42,7 +42,7 @@ int main(){
 	int data[MAX];
 	int n = 0;
 	
-	FILE *fp = fopen("/workspace/sp_1/study/input.txt", "r");
+	FILE *fp = fopen("/workspace/problem_solving_C/study/input.txt", "r");
 	while(fscanf(fp,"%d", &data[n]) != EOF){
 		n++;
 	}
@@ -74,7 +74,7 @@ int main(){
 	int data[MAX];
 	int n = 0;
 	
-	FILE *fp = fopen("/workspace/sp_1/study/input.txt", "r");
+	FILE *fp = fopen("/workspace/problem_solving_C/study/input.txt", "r");
 	while(fscanf(fp,"%d", &data[n]) != EOF){
 		n++;
 	}
@@ -108,7 +108,7 @@ int main(){
 	int data[MAX];
 	int n = 0;
 	
-	FILE *fp = fopen("/workspace/sp_1/study/input.txt", "r");
+	FILE *fp = fopen("/workspace/problem_solving_C/study/input.txt", "r");
 	while(fscanf(fp,"%d", &data[n]) != EOF){
 		n++;
 	}
