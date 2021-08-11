@@ -1,43 +1,70 @@
 #include <stdio.h>
-//5-9[해결]
-//우선 input9.txt파일로 부터 정수들을 읽는다. 정수의 개수는 따로 주어지지 않으며 파일의 끝까지 읽어야 한다. 정수의 개수는 100개 이하이다. 정수들 중에서 자신보다 먼저 나온 모든 정수들 보다 크거나 같은 정수를 리더라고 부른다. 그리고 첫 번째 정수는 무조건 리더이다. 리더가 아닌 모든 정수들은 무시하고 리더들만 입력된 순서대로 배열에 저장하는 프로그램을 작성하라. 리더들은 배열의 맨 앞에서 부터 빈 칸 없이 저장되어야 한다. 먼저 리더들의 개수를 출력하고 이어서 리더들을 순서대로 화면으로 출력하라.
+
+#define MAX 101
+
+//10-5
+//[Self avoiding walk] 2차원 평면에서 원점 (0,0)에서 출발한다. 사용자가 현재의 위치에서 상하좌우 어떤 한 방햐으로 얼마 만큼 이동하라는 명령을 내리면 그렇게 이동한다. 명령은 두 음이 아닌 정수로 표현 된다. 우선 방향은 0,1,2,3으로 표시하고 0은 y좌표가 증가하는 방향, 1은 x좌표가 증가하는 방향, 2는 y좌표가 감소하는 방향, 그리고 3은 x좌표가 감소하는 방향이다. 예를 들어 2 7은 y좌표가 7만큼 감소하는 위치로 이동하라는 명령이다. 프로그램은 사용자가 현재까지 이동한 궤적을 기억하고 있어야 한다. 사용자가 내린 명령대로 이동했을 때 만약 지금까지 이동한 궤적과 교차하면 invalid move라고 출력하고 이동 명령을 거부한다. 만양 그렇지 않으면 명령대로 이동하고 이동한 점의 좌표를 출력한다. 사용자가 -1 -1을 입력할 때 까지 이 일을 계속한다. 사용자가 -1 -1을 입력하면 프로그램을 종료한다. 이 문제를 해결하기 위해 사용자가 내린 명령이 invalid move인지 아닌지 검사하는 함수 check를 작성하라. 전역변수를 사용해서는 안된다.
+
+int check();
+
 int main(){
+	int flag[MAX][MAX] = {0};
+	int x = (MAX-1)/2;
+	int y = (MAX-1)/2;
+	int offset[][2] = {{0, 1},
+					   {1, 0},
+					   {0, -1},
+					   {-1, 0}};
+					   
 	
-	FILE *fp = fopen("/workspace/problem_solving_C/fileEx/input5-9.txt", "r");
-	int data[100];
-	int leader[100];
-	int i = 0;
+	flag[x][y] = 1;
 	
-	while(fscanf(fp,"%d", &data[i]) != EOF){
-		i++;
+	
+	while(1){
+		int dir;
+		int distance;
+		scanf("%d %d", &dir, &distance);
+		
+		if(dir == -1 && distance -1) break;
+		
+		if(check(flag, x, y, dir, distance) == 0){
+			for(int i = 0; i < distance; i++){
+				x += offset[dir][0];
+				y += offset[dir][1];
+				flag[x][y] = 1;
+			}
+			printf("%d %d\n", x - (MAX-1)/2, y - (MAX-1)/2);
+		} else {
+			printf("invalid move\n");
+		}
+		
+		
 	}
 	
-	//i = 10
-	
-	// for(int j = 0; j < i; j++){
-	// 	printf("%d", data[j]);
+	// for(int i = 0; i < MAX; i++){
+	// 	for(int j = 0; j < MAX; j++){
+	// 		printf("%d", flag[i][j]);
+	// 	}
+	// 	printf("\n");
 	// }
 	
-	leader[0] = data[0];
-	//data[0] = 1, data[1] = 2 ... data[9] =10
-	//leader[0] = 1, leader[8] = 9 laeader[9] = 10
 	
-	int k = 0;
 	
-	for(int j = 1; j < i; j++){
-		if(data[j] >= leader[k]){
-			k++;
-			leader[k] = data[j];
+}
+
+
+
+
+int check(int flag[][MAX], int x, int y, int dir, int distance){
+	int offset[][2] = {{0, 1},
+					   {1, 0},
+					   {0, -1},
+					   {-1, 0}};
+	
+	for(int i = 0; i < distance; i++){
+		if(flag[x += offset[dir][0]][y += offset[dir][1]] == 1){
+			return 1;
 		}
 	}
-	
-	printf("%d: ", k+1);
-	
-	for(int i = 0; i < k+1; i++){
-		printf("%d ", leader[i]);
-	}
-	
-	fclose(fp);
-	
-	getchar(); getchar();
+	return 0;	
 }

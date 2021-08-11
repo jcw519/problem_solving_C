@@ -2172,3 +2172,204 @@ int insert(int arr[], int n, int arrSize)
 	
 	return arrSize;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//10-3[미해결]
+//입력으로 N개의 수직 혹은 수평 선분이 주어진다. 선분들간의 교차점의 좌표를 모두 계산하여 x좌표에대한 오름차순으로 정렬하여 출력하는 프로그램을 작성하라. x좌표가 동일한 경우에는 y좌표가 작은 점을 먼저 출력한다. 입력은 input10-3.txt 파일로부터 받는다. 파일의 첫 줄에는 선분의 개숫 N이 주어지고, 이어진 N줄에는 각 줄마다 하나의 선분의 시작점과 끝점의 좌표가 주어진다. 수평 선분의 경우 x좌표가 작은 점이 먼저 주어지고, 수직 선분의 경우 y좌표가 작은 점이 항상 먼저 주어진다.  수직이나 수평이 아닌 선분이 주어지는 경우는 없다. 수평 선분끼리 만나거나 혹은 수직 선분끼리 만나는 경우는 교차점으로 간주하지 않는다. 이 문제를 해결하기 위해서 두 선분이 교차하는지 검사하는 함수 intersect를 만들어 사용하라. 하나의 수평선분 L과 수직성분 V가 교차하는지 검사하는 한 가지 방법은 L의 양 끝점이 V의 좌우에 나누어져 있고, 또한 V의 양 끝점이 L의 상하에 나누어져 있으면 교차하고 그렇지 않으면 교차하지 않는다. 매개 변수로 두 선분을 받아서 교차하면 1, 그렇지 않으면 0을 반환하라. 어떤 전역변수도 사용해서는 안된다.
+int intersect();
+void lineSort(int line[][4], int lineNum); //배열에 저장되어있는 선분의 좌표를 
+
+int main(){
+	int n; //선분의 객수
+	int line_L[MAX][4]; //수평선분
+	int line_V[MAX][4]; //수직선분
+	int result[MAX][4];
+	int result_index = 0;
+	int line_L_num = 0;
+	int line_V_num = 0;
+	
+	FILE *fp = fopen("/workspace/problem_solving_C/fileEx/input10-3.txt", "r");
+	fscanf(fp, "%d", &n);
+	
+	for(int i = 0; i < n; i++){
+		int x1, y1, x2, y2;
+		fscanf(fp, "%d %d %d %d", &x1, &y1, &x2, &y2);
+		
+		if(y1 == y2 && x1 != x2) { /*수평성분*/
+			line_L[line_L_num][0] = x1;
+			line_L[line_L_num][1] = y1;
+			line_L[line_L_num][2] = x2;
+			line_L[line_L_num][3] = y2;
+			line_L_num++;
+		} else if(x1 == x2) { /*수직성분*/
+			line_V[line_V_num][0] = x1;
+			line_V[line_V_num][1] = y1;
+			line_V[line_V_num][2] = x2;
+			line_V[line_V_num][3] = y2;
+			line_V_num++;
+		}		
+	}
+	
+	fclose(fp);
+	
+	lineSort(line_L,line_L_num);
+	lineSort(line_V,line_V_num);
+	
+	for(int i = 0; i < line_L_num; i++){
+		for(int j = 0; j < 4; j++){
+			printf("%d ", line_L[i][j]);
+		}
+		printf("\n");
+	}
+	printf("\n");
+	for(int i = 0; i < line_V_num; i++){
+		for(int j = 0; j < 4; j++){
+			printf("%d ", line_V[i][j]);
+		}
+		printf("\n");
+	}
+	printf("\n");
+	printf("\n");
+	
+	for(int i = 0; i < line_L_num; i++){
+		for(int j = 0; j < line_V_num; j++){
+			int judg = intersect(line_L, line_V, j, i);
+			if(judg == 1){
+				result[result_index][0] = line_V[j][0];
+				result[result_index][1] = line_L[i][1];
+				result[result_index][2] = j;
+				result[result_index][3] = i;
+				result_index++;
+			}	
+		}
+	}	
+	
+	for(int i = 0; i < result_index; i++){
+		for(int j = 0; j < 4; j++){
+			printf("%d ", result[i][j]);
+		}
+		printf("\n");
+	}
+	
+	getchar();
+	
+}
+
+
+
+int intersect(int line_L[][4], int line_V[][4], int line_L_index, int line_V_index)
+{
+	if(line_V[line_V_index][0] >= line_L[line_L_index][0] && line_V[line_V_index][0] <= line_L[line_L_index][2]
+	  && line_L[line_L_index][1] >= line_V[line_V_index][1] && line_L[line_L_index][1] <= line_V[line_V_index][4]){
+		return 1;
+	}
+	return 0;
+}
+
+
+//2차원 행렬의 swap 고민해보기
+void lineSort(int line[][4], int lineNum)
+{
+	for(int i = lineNum - 1; i > 0; i--){
+		for(int j = 0; j < i; j++){
+			if(line[j][0] > line[j+1][0]){
+				for(int k = 0; k < 4; k++){
+					int tmp = line[i][k];
+					line[i][k] = line[j][k];
+					line[j][k] = tmp;
+				}
+			}
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//10-5[해결]
+//[Self avoiding walk] 2차원 평면에서 원점 (0,0)에서 출발한다. 사용자가 현재의 위치에서 상하좌우 어떤 한 방햐으로 얼마 만큼 이동하라는 명령을 내리면 그렇게 이동한다. 명령은 두 음이 아닌 정수로 표현 된다. 우선 방향은 0,1,2,3으로 표시하고 0은 y좌표가 증가하는 방향, 1은 x좌표가 증가하는 방향, 2는 y좌표가 감소하는 방향, 그리고 3은 x좌표가 감소하는 방향이다. 예를 들어 2 7은 y좌표가 7만큼 감소하는 위치로 이동하라는 명령이다. 프로그램은 사용자가 현재까지 이동한 궤적을 기억하고 있어야 한다. 사용자가 내린 명령대로 이동했을 때 만약 지금까지 이동한 궤적과 교차하면 invalid move라고 출력하고 이동 명령을 거부한다. 만양 그렇지 않으면 명령대로 이동하고 이동한 점의 좌표를 출력한다. 사용자가 -1 -1을 입력할 때 까지 이 일을 계속한다. 사용자가 -1 -1을 입력하면 프로그램을 종료한다. 이 문제를 해결하기 위해 사용자가 내린 명령이 invalid move인지 아닌지 검사하는 함수 check를 작성하라. 전역변수를 사용해서는 안된다.
+
+int check();
+
+int main(){
+	int flag[MAX][MAX] = {0};
+	int x = (MAX-1)/2;
+	int y = (MAX-1)/2;
+	int offset[][2] = {{0, 1},
+					   {1, 0},
+					   {0, -1},
+					   {-1, 0}};
+					   
+	
+	flag[x][y] = 1;
+	
+	
+	while(1){
+		int dir;
+		int distance;
+		scanf("%d %d", &dir, &distance);
+		
+		if(dir == -1 && distance -1) break;
+		
+		if(check(flag, x, y, dir, distance) == 0){
+			for(int i = 0; i < distance; i++){
+				x += offset[dir][0];
+				y += offset[dir][1];
+				flag[x][y] = 1;
+			}
+			printf("%d %d\n", x - (MAX-1)/2, y - (MAX-1)/2);
+		} else {
+			printf("invalid move\n");
+		}
+		
+		
+	}
+	
+	// for(int i = 0; i < MAX; i++){
+	// 	for(int j = 0; j < MAX; j++){
+	// 		printf("%d", flag[i][j]);
+	// 	}
+	// 	printf("\n");
+	// }
+	
+}
+
+
+
+
+int check(int flag[][MAX], int x, int y, int dir, int distance){
+	int offset[][2] = {{0, 1},
+					   {1, 0},
+					   {0, -1},
+					   {-1, 0}};
+	
+	for(int i = 0; i < distance; i++){
+		if(flag[x += offset[dir][0]][y += offset[dir][1]] == 1){
+			return 1;
+		}
+	}
+	return 0;	
+}
