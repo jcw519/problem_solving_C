@@ -2,69 +2,74 @@
 
 #define MAX 101
 
-//10-5
-//[Self avoiding walk] 2차원 평면에서 원점 (0,0)에서 출발한다. 사용자가 현재의 위치에서 상하좌우 어떤 한 방햐으로 얼마 만큼 이동하라는 명령을 내리면 그렇게 이동한다. 명령은 두 음이 아닌 정수로 표현 된다. 우선 방향은 0,1,2,3으로 표시하고 0은 y좌표가 증가하는 방향, 1은 x좌표가 증가하는 방향, 2는 y좌표가 감소하는 방향, 그리고 3은 x좌표가 감소하는 방향이다. 예를 들어 2 7은 y좌표가 7만큼 감소하는 위치로 이동하라는 명령이다. 프로그램은 사용자가 현재까지 이동한 궤적을 기억하고 있어야 한다. 사용자가 내린 명령대로 이동했을 때 만약 지금까지 이동한 궤적과 교차하면 invalid move라고 출력하고 이동 명령을 거부한다. 만양 그렇지 않으면 명령대로 이동하고 이동한 점의 좌표를 출력한다. 사용자가 -1 -1을 입력할 때 까지 이 일을 계속한다. 사용자가 -1 -1을 입력하면 프로그램을 종료한다. 이 문제를 해결하기 위해 사용자가 내린 명령이 invalid move인지 아닌지 검사하는 함수 check를 작성하라. 전역변수를 사용해서는 안된다.
+//11-2 Brute-Force 기법
+//2차원 배열에서 소수 찾기
+//입력으로 n*n개의 음이 아닌 한자리 정수가 그림과 같이 주어진다. 이 정수들 중 가로, 세로, 대각선의 8방향으로 6개 이하의 연속된 숫자들을 합쳐서 만들 수 있는 모든 소수를 찾아서 나열하는 프로그램을 작성하라. 중복된 수를 출력해도 상관없다.
+int n;
+int grid[MAX][MAX];
 
-int check();
-
-int main(){
-	int flag[MAX][MAX] = {0};
-	int x = (MAX-1)/2;
-	int y = (MAX-1)/2;
-	int offset[][2] = {{0, 1},
-					   {1, 0},
-					   {0, -1},
-					   {-1, 0}};
-					   
+int main() {
+	FILE *fp = fopen("/workspace/problem_solving_C/study/input.txt", "r");
 	
-	flag[x][y] = 1;
+	fscanf(fp, "%d", &n);
 	
-	
-	while(1){
-		int dir;
-		int distance;
-		scanf("%d %d", &dir, &distance);
-		
-		if(dir == -1 && distance -1) break;
-		
-		if(check(flag, x, y, dir, distance) == 0){
-			for(int i = 0; i < distance; i++){
-				x += offset[dir][0];
-				y += offset[dir][1];
-				flag[x][y] = 1;
-			}
-			printf("%d %d\n", x - (MAX-1)/2, y - (MAX-1)/2);
-		} else {
-			printf("invalid move\n");
+	for(int i = 0; i < n; i++){
+		for(int j = 0 ; j < n; j++){
+			fscanf(fp, "%d", &grid[i][j]);
 		}
-		
-		
 	}
 	
-	// for(int i = 0; i < MAX; i++){
-	// 	for(int j = 0; j < MAX; j++){
-	// 		printf("%d", flag[i][j]);
-	// 	}
-	// 	printf("\n");
-	// }
+	fclose(fp);
 	
+	for(int x = 0; x < n; x++){
+		for(int y = 0; y < n; y++) {
+			for(int dir = 0; dir < 8; dir++) {
+				for(int length = 1; length < 6; length++) {
+					int value = computeValue(x, y, dir, length);
+					if(value != -1 && isPrime(value))
+						printf("%d\n", value);
+				}
+			}
+		}
+	}
+}
+
+int computeValue(int x, int y, int dir, int len){
+	int value = 0;
+	for(int i = 0; i < len; i++){
+		int digit = getDigit(x, y , dir, i);
+		if (digit == -1)
+			return -1;
+		value = value*10 + digit;
+	}
+	return value;
+}
+
+int getDigit(int x, int y, int dir, int k){
+	int newX = x, newY = y;
+	switch (dir) {
+		case 0: newY -= k; break;
+		case 1: newX += k; newY -= k; break;
+		case 2: newX += k; break;
+		case 3: newX += k; newY += k; break;
+		case 4: newY += k; break;
+		case 5: newX -= k; newY += k; break;
+		case 6: newX -= k; break;
+		case 7: newX -= k; newY -= k; break;
+	}
 	
+	if(newX < 0 || newX >= n || newY < 0 || newY >=n)
+		return -1;
+	
+	return grid[newX][newY];
 	
 }
 
-
-
-
-int check(int flag[][MAX], int x, int y, int dir, int distance){
-	int offset[][2] = {{0, 1},
-					   {1, 0},
-					   {0, -1},
-					   {-1, 0}};
-	
-	for(int i = 0; i < distance; i++){
-		if(flag[x += offset[dir][0]][y += offset[dir][1]] == 1){
-			return 1;
-		}
+int isPrime(int k){
+	if(k == 1)
+		return 0;
+	for(int i = 2; i * i < k; i++){
+		if(k%i == 0) return 0;
 	}
-	return 0;	
+	return 1;
 }
