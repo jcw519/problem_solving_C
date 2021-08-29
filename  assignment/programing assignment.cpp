@@ -2373,3 +2373,108 @@ int check(int flag[][MAX], int x, int y, int dir, int distance){
 	}
 	return 0;	
 }
+
+
+
+
+
+
+
+
+
+
+//12-1[해결]
+//입력으로 하나의 문자열을 받은 후 뒤집어서 추력하는 프로그램을 작성하라. 예를 들어 hello를 입력하면 olleh가 출력된다.
+int main(void) {
+	char word[10];
+	int wordLength;
+	scanf("%s", word);
+	wordLength = strlen(word);
+	
+	for(int i = wordLength - 1; i >=0; i--){
+		printf("%c",word[i]);
+	}
+	printf("\n");
+}
+
+
+
+
+
+
+
+//12-2[해결]
+//하나의 영문 소문자로 구성된 문자열을 입력받은 후 문자열을 구성하는 문자들을 알파벳 순으로 정렬하여 만들어지는 문자열을 출력하라. 예를 들어 hello가 입력되면 ehllo를 출력한다.
+#include <string.h>
+
+void stringSort(char str[]){
+	int strLength = strlen(str);
+	
+	for(int i = strLength - 1; i > 0; i--){
+		for(int j = 0; j < i; j++){
+			if(str[j] > str[j+1]){
+				char tmp;
+				tmp = str[j];
+				str[j] = str[j+1];
+				str[j+1] = tmp;
+			}
+		}
+	}
+}
+
+int main(void) {
+	char str[10];
+	scanf("%s", str);
+	stringSort(str);
+	printf("%s\n",str);
+}
+
+
+
+
+
+
+
+
+
+//12-3[해결]
+//아나그램(anagram)이란 문자들의 순서를 재배열하여 동일하게 만들 수 있는 문자열을 말한다. 대소문자는 구분하지 않는다. 예를 들어서 Silent와 Listen은 아나그램이다. 입력으로 두 문자열을 받아서 아나그램인지 판단하는 프로그램을 작성하라.
+void stringSort(char str[]){
+	int strLength = strlen(str);
+	
+	for(int i = strLength - 1; i > 0; i--){
+		for(int j = 0; j < i; j++){
+			if(str[j] > str[j+1]){
+				char tmp;
+				tmp = str[j];
+				str[j] = str[j+1];
+				str[j+1] = tmp;
+			}
+		}
+	}
+}
+
+void strLow(char str[]){
+	for(int i = 0; i < strlen(str); i++){
+		if('A' <= str[i] && 'Z' >= str[i])
+			str[i] = str[i] + 32;
+	}
+}
+
+int main(void) {
+	char str1[10];
+	char str2[10];
+	scanf("%s", str1);
+	scanf("%s", str2);
+	strLow(str1);
+	strLow(str2);
+	stringSort(str1);
+	stringSort(str2);
+	//printf("%s %s", str1, str2);
+	
+	if(strcmp(str1, str2) == 0){
+		printf("yes");
+	} else {
+		printf("no");
+	}
+}

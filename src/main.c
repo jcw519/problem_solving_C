@@ -1,106 +1,45 @@
-//13-2 문자열 응용
 #include <stdio.h>
 #include <string.h>
-#define MAX_WORD 4000
-#define MAX_LEN 20
 
-char getChar(int i, int j, int dir, int dist);
-int search(int nTh);
-void readGrid();
-void readDictionary();
-
-char dict[MAX_WORD][MAX_LEN];
-char grid[MAX_LEN][MAX_LEN];
-int n_words;
-int gridSize;
-
-int main(void) {
-	readDictionary();
-	readGrid();
+//12-3
+//아나그램(anagram)이란 문자들의 순서를 재배열하여 동일하게 만들 수 있는 문자열을 말한다. 대소문자는 구분하지 않는다. 예를 들어서 Silent와 Listen은 아나그램이다. 입력으로 두 문자열을 받아서 아나그램인지 판단하는 프로그램을 작성하라.
+void stringSort(char str[]){
+	int strLength = strlen(str);
 	
-	//for(int i = 0 ; i < gridSize; i++){
-	//	for(int j = 0; j < gridSize; j++){
-	//		printf("%c", grid[i][j]);
-	//	}
-	//	printf("\n");
-	//}
-	
-	//for(int i = 0; i < n_words; i++){
-	//	printf("%s\n", dict[i]);
-	//}
-	
-	int i;
-	for(i = 0; i < n_words; i++) {
-		int result = search(i);
-		if(result == 1)
-			printf("%s\n", dict[i]);
-	}
-	
-}
-
-void readDictionary(){
-	FILE *fp = fopen("dictionary.txt", "r");
-	int i = 0;
-	while(fscanf(fp,"%s", dict[i]) != EOF){
-		i++;
-	}
-	n_words = i;
-	fclose(fp);
-	return;
-}
-
-void readGrid(){
-	FILE *fp = fopen("input.txt", "r");
-	fscanf(fp, "%d", &gridSize);
-	
-	for(int i = 0; i < gridSize; i++){
-		fscanf(fp, "%s", grid[i]);
-	}
-	fclose(fp);
-	return;
-}
-
-int search(int nTh){
-	char word[MAX_LEN];
-	
-	//strcpy(1,2): 2->1으로 복사되어진다.
-	strcpy(word, dict[nTh]);
-	//printf("%s", word);
-	
-	int wordLength = strlen(word);
-	
-	for(int i = 0; i < gridSize; i++){
-		for(int j = 0; j < gridSize; j++){
-			if(grid[i][j] != word[0])
-				continue;
-			
-			for(int dir = 0; dir < 8; dir++){
-				int dist = 1;
-				for(;dist < wordLength; dist++){
-					char ch = getChar(i, j, dir, dist);
-					if(ch == '\0' || ch != word[dist])
-						break;
-				}
-				if(dist >= wordLength){
-					return 1;
-				}
-				
+	for(int i = strLength - 1; i > 0; i--){
+		for(int j = 0; j < i; j++){
+			if(str[j] > str[j+1]){
+				char tmp;
+				tmp = str[j];
+				str[j] = str[j+1];
+				str[j+1] = tmp;
 			}
 		}
 	}
-	return 0;
 }
 
-char getChar(int i, int j, int dir, int dist){
-	int newI = i, newJ = j;
-	int offSetI[] = {-1,-1,0,1,1,1,0,1};
-	int offSetJ[] = {0,1,1,1,0,-1,-1,-1};
-	
-	newI += dist*offSetI[dir];
-	newJ += dist*offSetJ[dir];
-	
-	if(newI < 0 || newI >= gridSize || newJ < 0 || newJ >= gridSize)
-		return '\0';
-	
-	return grid[newI][newJ];
+void strLow(char str[]){
+	for(int i = 0; i < strlen(str); i++){
+		if('A' <= str[i] && 'Z' >= str[i])
+			str[i] = str[i] + 32;
+	}
 }
+
+int main(void) {
+	char str1[10];
+	char str2[10];
+	scanf("%s", str1);
+	scanf("%s", str2);
+	strLow(str1);
+	strLow(str2);
+	stringSort(str1);
+	stringSort(str2);
+	//printf("%s %s", str1, str2);
+	
+	if(strcmp(str1, str2) == 0){
+		printf("yes");
+	} else {
+		printf("no");
+	}
+}
+
