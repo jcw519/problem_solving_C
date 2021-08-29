@@ -1,3 +1,92 @@
+#include <stdio.h>
+#include <string.h>
+#define MAX 100
+
+//13-1 문자열 응용
+//단어 찾기
+//2차원 문자 배열을 파일로부터 읽는다. 입력으로 하나의 문자열을 받아서 배열의 행, 열 혹은 대각선에서 찾는다.
+
+char getChar(int i, int j, int dir, int dist);
+
+char grid[MAX][MAX];
+int N;
+char word[MAX];
+int len;
+
+int main() {
+	FILE *fp = fopen("input.txt", "r");
+	fscanf(fp, "%d", &N);
+	for(int i = 0; i < N; i++){
+		fscanf(fp, "%s", grid[i]);
+	}
+	
+	fclose(fp);
+	scanf("%s", word);
+	len = strlen(word);
+	
+	int wordExist = 0;
+
+	for(int i = 0; i < N; i++){
+		for(int j = 0; j < N; j++){
+			if(grid[i][j] != word[0])
+				continue;
+			if(len == 1 && grid[i][j] == word[0]){
+				printf("Found at %d %d.\n", i, j);
+				wordExist = 1;
+				continue;
+			}
+			
+			for(int dir = 0; dir < 8; dir++){
+				int dist = 1;
+				for(; dist < len; dist++){
+					char ch = getChar(i, j, dir, dist);
+					if(ch == '\0' || ch != word[dist])
+						break;
+				}
+				if(dist >= len){
+					printf("Found at %d %d %d %d.\n", i, j, dir, dist);
+					wordExist = 1;
+				}
+			}
+		}
+	}
+	
+	if(wordExist == 0)
+		printf("단어를 찾을 수 없습니다.\n");
+	return 0;
+}
+
+
+char getChar(int i, int j, int dir, int dist){
+	int newI = i, newJ = j;
+	int offSetI[] = {-1,-1,0,1,1,1,0,1};
+	int offSetJ[] = {0,1,1,1,0,-1,-1,-1};
+	
+	newI += dist*offSetI[dir];
+	newJ += dist*offSetJ[dir];
+	
+	if(newI < 0 || newI >= N || newJ < 0 || newJ >= N)
+		return '\0';
+	
+	return grid[newI][newJ];
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //13-2 문자열 응용
 #include <stdio.h>
 #include <string.h>
@@ -17,18 +106,6 @@ int gridSize;
 int main(void) {
 	readDictionary();
 	readGrid();
-	
-	//for(int i = 0 ; i < gridSize; i++){
-	//	for(int j = 0; j < gridSize; j++){
-	//		printf("%c", grid[i][j]);
-	//	}
-	//	printf("\n");
-	//}
-	
-	//for(int i = 0; i < n_words; i++){
-	//	printf("%s\n", dict[i]);
-	//}
-	
 	int i;
 	for(i = 0; i < n_words; i++) {
 		int result = search(i);
